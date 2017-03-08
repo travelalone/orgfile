@@ -1,0 +1,141 @@
+#+TITLE: simulate
+
+* trpzip2
+** compute with cpu RMSD
+   #+ATTR_ORG: :width 400px
+   [[file:image/0307/compute_with_cpu.png]]
+** Temperature constraint  
+*** no constraint 
+    :LOGBOOK:
+    CLOCK: [2017-03-04 Sat 12:41]
+    :END:
+    #+ATTR_ORG: :width 400px
+    [[file:image/0307/temp_norestrain.png]]
+*** exist constraint
+    #+ATTR_ORG: :width 400px
+   [[file:image/0307/temp-restrain.png]] 
+** explicit 
+   #+ATTR_ORG: :width 400px
+   [[file:image/0307/trpzip2_explicit.png]] 
+    
+* CLN025
+** explicit 
+*** Prepare  
+**** Method
+    - *Force Field* ff12SB  
+    - *Solvateoct* TIP3PBOX 
+**** tleap 
+     #+BEGIN_SRC 
+     source leaprc.protein.ff12SB
+     mol=sequence {NSER TRP THR TRP GLU ASN GLY LYS TRP THR TRP CLYS}
+     source leaprc.water.tip3p
+     solvateoct mol TIP3PBOX 8
+     addions2 mol Cl- 0
+     saveamberparm mol trpzip2_solv.prmtop trpzip2_solv.inpcrd
+     quit
+     #+END_SRC
+*** minimize 
+**** Hold protein fixed
+     #+BEGIN_src
+     stage 1 minimize
+     &cntrl
+     imin=1,maxcyc=10000,ncyc=5000,
+     cut=10.0,ntc=2,ntf=2,ntb=1,ntr=1
+     /
+     Hold protein fixed
+     500.0
+     RES 1 12
+     END
+     END
+     #+END_src
+**** Relax everything
+    #+BEGIN_SRC 
+    stage 1 minimize
+    &cntrl
+    imin=1,maxcyc=10000,ncyc=5000,
+    cut=10.0,ntc=2,ntf=2,ntb=1
+    /
+    #+END_SRC
+*** Heat
+**** Keep protein fixed with weak restraints, hold volume constant
+     #+BEGIN_SRC 
+     heat
+     &cntrl
+     imin=0,irest=0,ntx=1,
+     ntb=1,cut=10.0,ntr=1
+     nstlim=100000,dt=0.002,
+     tempi=0.0,temp0=300.0
+     ntc=2,ntf=2,ntwx=100,
+     ntt=3,gamma_ln=2.0,
+     /
+     Keep protein fixed with weak restraints
+     10.0
+     RES 1 12
+     END
+     END
+     #+END_SRC
+**** Hold Pressure constant
+     #+BEGIN_SRC 
+     heat
+     &cntrl
+     imin=0,irest=1,ntx=5,
+     ntb=2,ntp=1,cut=10.0
+     nstlim=100000,dt=0.002,
+     temp0=300.0
+     ntc=2,ntf=2,ntwx=100,
+     ntt=3,gamma_ln=2.0,
+     /
+     #+END_SRC
+*** Prod 
+**** Hold Pressure constant
+  #+BEGIN_SRC 
+  stage 2 equilibration 50ns 
+  &cntrl
+  imin=0,nstlim=25000000,dt=0.002,
+  irest=1,ntx=5,
+  ioutfm=1,ntxo=2,ntwv=-1
+  ntc=2,ntf=2,
+  ntb=2,ntp=1,
+  temp0=300.0,
+  ntpr=5000,ntwx=10000,
+  cut=10.0,
+  ntt=3,gamma_ln=2.0,
+  /
+  #+END_SRC
+    
+** Implicit solvent
+*** Force field *FF14SB*
+*** Temperature control 
+    ~ntt=3,gamma_ln=1~
+*** RMSD
+    #+ATTR_ORG: :width 400px
+    [[file:image/0307/CLN025.rmsd.png]]
+*** one dimensional free energy landscape
+   #+ATTR_ORG: :width 400px
+   [[file:image/0307/CLN025_1d_free_energy.png]]
+
+* Trpcage
+** implicit 
+*** rmsd 
+    #+ATTR_ORG: :width 400px
+    [[file:image/0307/trp_cage_rmsd.png]] 
+*** free energy landscape
+    #+ATTR_ORG: :width 400px
+    [[file:image/0307/trp_cage_1d_free_energy.png]] 
+    
+* trpzip2 start with native state 
+** ntt=1 && igb=1
+   #+ATTR_ORG: :width 400px
+  [[file:image/0307/1le1_ntt_1_igb_1.png]]
+
+** ntt=3 && igb=1
+   #+ATTR_ORG: :width 400px
+   [[file:image/0307/1le1_ntt_3_igb_1.png]]
+   
+** ntt=1 && igb=8
+   #+ATTR_ORG: :width 400px
+   [[file:image/0307/1le1_ntt_1_igb_8.png]]
+
+** ntt=3 && igb=8
+   #+ATTR_ORG: :width 400px
+  [[file:image/0307/1le1_ntt_3_igb_8.png]] 

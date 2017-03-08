@@ -1,0 +1,5 @@
+* How to frozen or restrained atoms
+** restrained atoms ~ntr~ 
+*** =ntr=1= restrain use a harmonic potentail 
+*** =restrainmask= specifies the restrained atoms
+*** =restraint_wt= weight for positional restraints
