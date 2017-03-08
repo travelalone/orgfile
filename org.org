@@ -1,147 +1,136 @@
 #+TITLE: Interesting topic
 
-* 插入 gnuplot 程序
-** 配置好 gnuplot，可以正常使用 ~set terminal png~ 这条命令 
-** 需要加入下面的代码，使得可以运行 gnuplot 
-   #+begin_example
-   ;; active Babel languages
-   (org-babel-do-load-languages
-    'org-babel-load-languages
-    '((gnuplot . t)))
-   ;; add additional languages with '((language . t)))
-   #+end_example
-** 插入 gnuplot 函数代码 
-#+begin_src gnuplot :results output :file image/org/basic-function.png
-reset
-set title "Putting it All Together"
-set xlabel "X"
-set xrange [-8:8]
-set xtics -8,2,8
+** 插入 gnuplot 程序
+   1. 配置好 gnuplot，可以正常使用 ~set terminal png~ 这条命令 
+   2. 需要加入下面的代码，使得可以运行 gnuplot 
+      #+begin_example
+      ;; active Babel languages
+      (org-babel-do-load-languages
+      'org-babel-load-languages
+      '((gnuplot . t)))
+      ;; add additional languages with '((language . t)))
+      #+end_example
+   3. 插入 gnuplot 函数代码 
+      #+begin_src gnuplot :results output :file image/org/basic-function.png
+      reset
+      set title "Putting it All Together"
+      set xlabel "X"
+      set xrange [-8:8]
+      set xtics -8,2,8
+      
+      set ylabel "Y"
+      set yrange [-20:70]
+      set ytics -20,10,70
+      
+      f(x) = x**2
+      g(x) = x**3
+      h(x) = 10*sqrt(abs(x))
 
-set ylabel "Y"
-set yrange [-20:70]
-set ytics -20,10,70
+      plot f(x) w lp lw 1, g(x) w p lw 2, h(x) w l lw 3
+      #+end_src
 
-f(x) = x**2
-g(x) = x**3
-h(x) = 10*sqrt(abs(x))
+      #+RESULTS:
+      [[file:image/org/basic-function.png]]
+   4. 插入有表格数据的代码
+      #+tblname: basic-plot
+      |   x |         y1 |         y2 |
+      |-----+------------+------------|
+      | 0.1 |      0.425 |      0.375 |
+      | 0.2 |     0.3125 |     0.3375 |
+      | 0.3 | 0.24999993 | 0.28333338 |
+      | 0.4 |      0.275 |    0.28125 |
+      | 0.5 |       0.26 |       0.27 |
+      | 0.6 | 0.25833338 | 0.24999993 |
+      | 0.7 | 0.24642845 | 0.23928553 |
+      | 0.8 |    0.23125 |     0.2375 |
+      | 0.9 | 0.23333323 |  0.2333332 |
+      |   1 |     0.2225 |       0.22 |
 
-plot f(x) w lp lw 1, g(x) w p lw 2, h(x) w l lw 3
-#+end_src
+      #+begin_src gnuplot :var data=basic-plot :exports code :file image/org/basic-plot.png
+      set title "Putting it All Together"
+      set xlabel "X"
+      set xrange [0:1]
+      set xtics 0,0.1,1
+      
+      set ylabel "Y"
+      set yrange [0.2:0.5]
+      set ytics 0.2,0.05,0.5
 
-#+RESULTS:
-[[file:image/org/basic-function.png]]
-
-
-
-** 插入有表格数据的代码
-   #+tblname: basic-plot
-|   x |         y1 |         y2 |
-|-----+------------+------------|
-| 0.1 |      0.425 |      0.375 |
-| 0.2 |     0.3125 |     0.3375 |
-| 0.3 | 0.24999993 | 0.28333338 |
-| 0.4 |      0.275 |    0.28125 |
-| 0.5 |       0.26 |       0.27 |
-| 0.6 | 0.25833338 | 0.24999993 |
-| 0.7 | 0.24642845 | 0.23928553 |
-| 0.8 |    0.23125 |     0.2375 |
-| 0.9 | 0.23333323 |  0.2333332 |
-|   1 |     0.2225 |       0.22 |
-
-#+begin_src gnuplot :var data=basic-plot :exports code :file image/org/basic-plot.png
-set title "Putting it All Together"
-
-set xlabel "X"
-set xrange [0:1]
-set xtics 0,0.1,1
-
-
-set ylabel "Y"
-set yrange [0.2:0.5]
-set ytics 0.2,0.05,0.5
-
-
-plot data u 1:2 w p lw 2 title 'x vs. y1', \
-     data u 1:3 w lp lw 1 title 'x vx. y2'
-#+end_src
-
-#+RESULTS:
-[[file:image/org/basic-plot.png]]
+      
+      plot data u 1:2 w p lw 2 title 'x vs. y1', \
+      data u 1:3 w lp lw 1 title 'x vx. y2'
+      #+end_src  
 
 
-* 运行 python 程序
-** :session [name] :default is no session
-** :var data=data-table 可以从表中选择数据
-** :exports {code,results,both,none} 选择以什么方式导出
-** example 
-*** table 
-   #+tblname: data_table
-| a | 1 |
-| b | 2 |
-| c | 3 |
-#+begin_src python :var val=1 :var data=data_table
-# Return row specified by val.
-# In non-session mode, use return to return results.
-return(data[val])
-#+end_src
+** 运行 python 程序
+   1. :session [name] :default is no session
+   2. :var data=data-table 可以从表中选择数据
+   3. :exports {code,results,both,none} 选择以什么方式导出
+   4. example 
+     #+tblname: data_table
+     | a | 1 |
+     | b | 2 |
+     | c | 3 |
+     #+begin_src python :var val=1 :var data=data_table
+     # Return row specified by val.
+     # In non-session mode, use return to return results.
+     return(data[val])
+     #+end_src
 
-#+RESULTS:
-| b | 2 |
-
-*** matplotlib
-#+begin_src python :results file
-import matplotlib, numpy
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-fig=plt.figure(figsize=(4,2))
-x=numpy.linspace(-15,15)
-plt.plot(numpy.sin(x)/x)
-fig.tight_layout()
-plt.savefig('image/org/python-matplot-fig.png')
-return 'image/org/python-matplot-fig.png' # return filename to org-mode
-#+end_src
-
-#+RESULTS:
-[[file:image/org/python-matplot-fig.png]]
+     #+RESULTS:
+     | b | 2 |
+  
+     #+begin_src python :results file
+     import matplotlib, numpy
+     matplotlib.use('Agg')
+     import matplotlib.pyplot as plt
+     fig=plt.figure(figsize=(4,2))
+     x=numpy.linspace(-15,15)
+     plt.plot(numpy.sin(x)/x)
+     fig.tight_layout()
+     plt.savefig('image/org/python-matplot-fig.png')
+     return 'image/org/python-matplot-fig.png' # return filename to org-mode
+     #+end_src
+  
+     #+RESULTS:
+     [[file:image/org/python-matplot-fig.png]]
 
 
-* easy templates
-#+BEGIN_EXAMPLE
-s	#+BEGIN_SRC ... #+END_SRC 
-e	#+BEGIN_EXAMPLE ... #+END_EXAMPLE
-q	#+BEGIN_QUOTE ... #+END_QUOTE 
-v	#+BEGIN_VERSE ... #+END_VERSE 
-c	#+BEGIN_CENTER ... #+END_CENTER 
-l	#+BEGIN_LaTeX ... #+END_LaTeX 
-L	#+LaTeX: 
-h	#+BEGIN_HTML ... #+END_HTML 
-H	#+HTML: 
-a	#+BEGIN_ASCII ... #+END_ASCII 
-A	#+ASCII: 
-i	#+INDEX: line 
-I	#+INCLUDE: line
-#+END_EXAMPLE
+** easy templates
+   
+ #+BEGIN_EXAMPLE
+ s	#+BEGIN_SRC ... #+END_SRC 
+ e	#+BEGIN_EXAMPLE ... #+END_EXAMPLE
+ q	#+BEGIN_QUOTE ... #+END_QUOTE 
+ v	#+BEGIN_VERSE ... #+END_VERSE 
+ c	#+BEGIN_CENTER ... #+END_CENTER 
+ l	#+BEGIN_LaTeX ... #+END_LaTeX 
+ L	#+LaTeX: 
+ h	#+BEGIN_HTML ... #+END_HTML 
+ H	#+HTML: 
+ a	#+BEGIN_ASCII ... #+END_ASCII 
+ A	#+ASCII: 
+ i	#+INDEX: line 
+ I	#+INCLUDE: line
+ #+END_EXAMPLE
 
 
-* setting picture size
-** first need to disable below function  
-   ~# -*- org-image-actual-width: nil; -*-~
-** above the picture add below
-   ~#+ATTR_foo: :width 500px~
+** setting picture size
+   1. first need to disable below function  ~# -*- org-image-actual-width: nil; -*-~
+   2. above the picture add below ~#+ATTR_foo: :width 500px~
 
 
-* Keybindings
-| key         | description            |
-|-------------+------------------------|
-| C-c C-x C-v | display inline picture |
-| C-c C-l     | Insert link            |
-| C-c C-x C-l | display Latex equation |
+** Keybindings
+ | key         | description            |
+ |-------------+------------------------|
+ | C-c C-x C-v | display inline picture |
+ | C-c C-l     | Insert link            |
+ | C-c C-x C-l | display Latex equation |
 
 
-* Bugs
-** 加入 ~org-babel-load-languages~ 依然出现错误,无法编译程序
-*** 此时需要删除 =org mode= 的 =elc= 文件 
-*** cd ~/Users/haomiao/.emacs.d/elpa/org-20170210~ 
-*** rm ~*.elc~
-*** ~C-u 0 M-x byte-recompile-directory~
+** Bugs
+   1. 加入 ~org-babel-load-languages~ 依然出现错误,无法编译程序
+      - 此时需要删除 =org mode= 的 =elc= 文件 
+      - cd ~/Users/haomiao/.emacs.d/elpa/org-20170210~ 
+      - rm ~*.elc~
+      - ~C-u 0 M-x byte-recompile-directory~
