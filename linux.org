@@ -1,0 +1,10 @@
+* LINUX 查看文件编码和修改文件编码
+** 利用vi编辑器查看编码和改变编码 
+*** ~:set fileencoding~ 显示文件编码格式
+*** ~:set fileencoding=utf-8~ 转换文件格式为 =UTF-8= 编码
+* 为什么像vmd和gv这样在服务器上的程序无法通过ssh显示出图形界面
+  参考这篇文章[[http://www.hoffman2.idre.ucla.edu/access/x11_forwarding/]]
+  一般来说没有配置显示，只能显示x类的图像，而无法显示这些glx类与显卡有关的图像，此时需要在进行登录
+  时需要配置这些文件，例如对于mac系统，需要下载2.7.9版本的XQuartz，支持了glx这个选项，此时需要在终端
+  运行 ~defaults write org.macosforge.xquartz.X11 enable_iglx -bool true~ 这样关于 
+  =glx= 的应用 ~glxinfo  glxgears~ 就可以正常运行了.

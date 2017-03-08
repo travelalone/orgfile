@@ -1,0 +1,7 @@
+* 用emacs使用tramp
+** tramp可以远程修改文件
+** 一般使用方法，在配置好了 ~/.config/ssh~ ,
+*** 可以使用 ~C-x C-f /remotehost:filename  RET (or /method:user@remotehost:filename)~ 来修改远程文件
+*** 也可以使用 ~C-x C-f /md:filename RET~ md 是远程服务端的名字
+** 注意在.zshrc 使用中会hang住，需要加入
+   ~[[$TERM == "dumb" ]] && unsetopt zle && PS1='$ '~
