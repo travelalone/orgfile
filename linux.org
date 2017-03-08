@@ -1,10 +1,54 @@
-* LINUX 查看文件编码和修改文件编码
-** 利用vi编辑器查看编码和改变编码 
-*** ~:set fileencoding~ 显示文件编码格式
-*** ~:set fileencoding=utf-8~ 转换文件格式为 =UTF-8= 编码
-* 为什么像vmd和gv这样在服务器上的程序无法通过ssh显示出图形界面
-  参考这篇文章[[http://www.hoffman2.idre.ucla.edu/access/x11_forwarding/]]
-  一般来说没有配置显示，只能显示x类的图像，而无法显示这些glx类与显卡有关的图像，此时需要在进行登录
-  时需要配置这些文件，例如对于mac系统，需要下载2.7.9版本的XQuartz，支持了glx这个选项，此时需要在终端
-  运行 ~defaults write org.macosforge.xquartz.X11 enable_iglx -bool true~ 这样关于 
-  =glx= 的应用 ~glxinfo  glxgears~ 就可以正常运行了.
+* Linux
+** Install font for Linux
+*** 下载字体文件 OTF 到目录 =/usr/share/fonts/opentype=
+*** 刷新缓存 recreate the fonts cache ~sodo fc-cache -f -v~
+** LINUX 查看文件编码和修改文件编码
+*** 利用vi编辑器查看编码和改变编码 
+**** ~:set fileencoding~ 显示文件编码格式
+**** ~:set fileencoding=utf-8~ 转换文件格式为 =UTF-8= 编码
+** 为什么像vmd和gv这样在服务器上的程序无法通过ssh显示出图形界面
+   参考这篇文章[[http://www.hoffman2.idre.ucla.edu/access/x11_forwarding/]]
+   一般来说没有配置显示，只能显示x类的图像，而无法显示这些glx类与显卡有关的图像，此时需要在进行登录
+   时需要配置这些文件，例如对于mac系统，需要下载2.7.9版本的XQuartz，支持了glx这个选项，此时需要在终端
+   运行 ~defaults write org.macosforge.xquartz.X11 enable_iglx -bool true~ 这样关于 
+   =glx= 的应用 ~glxinfo  glxgears~ 就可以正常运行了.
+
+* Awk
+** Awk printf 用法
+*** Basic
+   #+BEGIN_EXAMPLE
+   printf(format,expression,expression,...)
+   #+END_EXAMPLE
+   =format= should be quoted
+*** format table 
+ | fmt     | $1      | printf(fmt,$1) |
+ |---------+---------+----------------|
+ | %c      | 97      | a              |
+ | %d      | 97.5    | 97             |
+ | %5d     | 97.5    | ___97          |
+ | %e      | 97.5    | 9.750000e+01   |
+ | %f      | 97.5    | 97.500000      |
+ | %7.2f   | 97.5    | __97.50        |
+ | %s      | January | January        |
+ | %10s    | January | ___January     |
+ | %-10s   | January | January___     |
+ | %.3s    | January | Jan            |
+ | %10.3s  | January | _______Jan     |
+ | %-10.3s | January | Jan_______     |
+ | %%      | January | %              |
+* VIM 
+** Vim paste mode
+*** Vim 进入 =paste mode= 后，会取消缩进，粘贴代码不会有变形
+** Vim select region 
+***  press ~v~  begin character based visual selection
+*** ~V~ select whole lines
+*** ~Ctrl-v~ select a block
+*** after select the region 
+**** ~d~ cut
+**** ~y~ copy 
+**** ~p~ paste after 
+**** ~P~ paste before 
+** Vim multi-line comment
+*** C-v 进入 visual block mode
+*** 选中区域,enter ~I~ ,enter ~%~
+*** enter ~ESC~
