@@ -3,3 +3,7 @@
 *** =ntr=1= restrain use a harmonic potentail 
 *** =restrainmask= specifies the restrained atoms
 *** =restraint_wt= weight for positional restraints
+
+** 如何利用REMD来进行模拟
+   1. REMD 是一种交换样本采样的方法，通过温度之间的交换，可以使得分子的构象能够发生较大的变化，跳出局部最小的区域
+   2. 首先准备分子的坐标文件和力场文件
