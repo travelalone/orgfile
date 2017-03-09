@@ -4,6 +4,45 @@
 *** =restrainmask= specifies the restrained atoms
 *** =restraint_wt= weight for positional restraints
 
-** 如何利用REMD来进行模拟
+* 如何利用REMD来进行模拟
    1. REMD 是一种交换样本采样的方法，通过温度之间的交换，可以使得分子的构象能够发生较大的变化，跳出局部最小的区域
    2. 首先准备分子的坐标文件和力场文件
+   3. 确定样本数和样本所在的温度
+      - Usually REMD simulations are run for a temperature range between 270 - 600K
+      - 保证相邻的温度之间势能分布存在重合
+      - 样本数通常是原子数目的平方根
+      - 选择温度较为经验，可以参考这个链接http://folding.bmc.uu.se/remd/index.php
+   4. 当温度很高时(500-600K)，会有可能发生分子手性的改变，因此需要对分子的手性进行约束
+      - 利用 =AMBER= 提供的 =makeCHIR_RSR= 可以产生需要的约束文件
+        #+BEGIN_EXAMPLE
+        > makeCHIR_RST ala10.pdb ala10_chir.dat
+        #+END_EXAMPLE
+   5. 使每个样本在相应的温度达到平衡，这一步不是一定需要的，因为在不同的温度下，=sander= 可以提供不同的速度。
+      - 在这一步可以用到 =multisander= 使计算并行
+      - 在用 =multisander= 进行计算时，需要 =groupfile= 文件，它包含如下信息
+        #+BEGIN_EXAMPLE
+        -O -rem 0 -i equilibrate.mdin.001 -o equilibrate.mdout.001 -c min.rst -r equilibrate.rst.001 -x equilibrate.mdcrd.001 -inf equilibra
+        te.mdinfo.001 -p ala10.prmtop
+        -O -rem 0 -i equilibrate.mdin.002 -o equilibrate.mdout.002 -c min.rst -r equilibrate.rst.002 -x equilibrate.mdcrd.002 -inf equilibra
+        te.mdinfo.002 -p ala10.prmtop
+        ...
+        #+END_EXAMPLE
+        这里的 =-rem =0= 表示不进行副本交换，其中的每一个 =equilibrate.mdin.001= 温度不一样
+      - 使用 ~mpirun -np 8 $AMBERHOME/exe/sander.MPI -ng 8 -groupfile equilibrate.groupfile~ 来运行程序，这里的 =-np 8= 表示有八个样本
+      - 注意在(4)生成了 =makeCHIR_RST= 需要将这个文件加入约束中需要加入 ~nmropt=1~, 并在in文件后面加上
+        #+BEGIN_EXAMPLE
+         &wt TYPE='END'
+         /
+         DISANG=ala10_chir.dat
+        #+END_EXAMPLE
+   6. 进行REMD样本交换
+      - 过程与第(5)步相同，只是需要将 *rem 1* ， 并改变in文件 
+      - 模拟的尺度需要设置两个参数 *nstlim=500* *numexchg=1000* 其中 *nstlim* 表示进行500步后，进行交换，而 *numexchg* 表示交换的次数,则整体的时间为 ~dt*nstlim*numexchg~
+      - 模拟时会生成rem.log, 记录了样本交换的一些信息
+   7. REMD结果分析
+      - 最后生成的每一个轨道文件都是包含了不同的温度，需要将每个温度分别提取出来
+      - 在提取温度时，只需要指明第一个轨道文件，但只能识别3位数字的后缀，如 /file.000,file.007/
+      - 在利用 =cpptraj= 时，需要指明是remd文件，如下
+        ~trajin remd.mdcrd.001 remdtraj remdtrajtemp 300.0~
+        ~trajout remd.300K.mdcrd nobox~
+         

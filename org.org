@@ -127,7 +127,7 @@
  | C-c C-l     | Insert link            |
  | C-c C-x C-l | display Latex equation |
 
-
+ 
 ** Bugs
    1. 加入 ~org-babel-load-languages~ 依然出现错误,无法编译程序
       - 此时需要删除 =org mode= 的 =elc= 文件 
