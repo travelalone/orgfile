@@ -46,3 +46,19 @@
         ~trajin remd.mdcrd.001 remdtraj remdtrajtemp 300.0~
         ~trajout remd.300K.mdcrd nobox~
          
+* 利用生成的rmsd.agr文件生成hist
+  利用hist命令
+  #+BEGIN_EXAMPLE
+  hist <dataset_name>[,<min>,<max>,<step>,<bins>]...
+  [free <temperature>] out <filename> 
+  #+END_EXAMPLE
+  具体参数见amber手册
+* 将两个分子重叠
+  利用vmd,使用下面的命令
+  #+BEGIN_SRC 
+  set all [atomselect 0 "all not water"]
+  set alpha1 [atomselect 0 "resid 4 to 26 and alpha"]
+  set alpha2 [atomselect 1 "resid 4 to 26 and alpha"]
+  set M [measure fit $alpha1 $alpha2]
+  $all move $M
+  #+END_SRC

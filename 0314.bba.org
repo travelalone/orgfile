@@ -1,0 +1,26 @@
+## -*- org-image-actual-width: 400; -*-
+
+* Explicit and implicit solvent 
+** bba 28 residues 
+*** ff14SB
+    #+ATTR_ORG: :width 400px 
+    [[file:image/0314/ff14SB.png]]
+    [[file:image/0314/ff14sb_free_energy.png]] 
+    [[file:image/0314/fit_ff14sb.png]]
+*** ff14sbonlysc
+    [[file:image/0314/ff14SBonlysc.png]]
+    [[file:image/0314/ff14sbonlysc_free_energy.png]]
+    [[file:image/0314/fit_bornlysc.png]]
+*** explicit
+    [[file:image/0314/explicit.png]]
+    [[file:image/0314/explicit_free_energy.png]] 
+    [[file:image/0314/fit_explicit.png]] 
+** fip35 33 residues 4 trajectories each 50ns
+*** 300K
+    [[file:image/0314/fip35_300K_rmsd.png]]
+   [[file:image/0314/fip35_300k_fit.png]] 
+
+*** 325K
+    [[file:image/0314/fip35_325K_rmsd.png]]
+    [[file:image/0314/fip35_235k_free_energy.png]]
+    [[file:image/0314/fip35_325k_fit.png]]
