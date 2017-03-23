@@ -15,6 +15,10 @@
     [[file:image/0314/explicit.png]]
     [[file:image/0314/explicit_free_energy.png]] 
     [[file:image/0314/fit_explicit.png]] 
+*** MDEC
+    [[file:image/0314/bba_mdec_rmsd.png]] 
+    [[file:image/0314/bba_mdec_free_energy.png]]
+    [[file:image/0314/bba_mdec_fit.png]] 
 ** fip35 33 residues 4 trajectories each 50ns
 *** 300K
     [[file:image/0314/fip35_300K_rmsd.png]]
@@ -24,3 +28,13 @@
     [[file:image/0314/fip35_325K_rmsd.png]]
     [[file:image/0314/fip35_235k_free_energy.png]]
     [[file:image/0314/fip35_325k_fit.png]]
+*** REMD
+    315.34K
+    [[file:image/0314/fip35_remd.png]]
+    331.72K
+    [[file:image/0314/fip35_remd_331.72K.png]]
+    fit
+    [[file:image/0314/fip35_fit_331.72K.png]]
+*** Explicit
+    [[file:image/0314/fip35_explicit_rmsd.png]]
+    [[file:image/0314/fip35_explicit_free_energy.png]]
