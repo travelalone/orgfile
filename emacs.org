@@ -4,3 +4,11 @@
    - 可以使用 ~C-x C-f /remotehost:filename  RET (or /method:user@remotehost:filename)~ 来修改远程文件
    - 也可以使用 ~C-x C-f /md:filename RET~ md 是远程服务端的名字
 3. 注意在.zshrc 使用中会hang住，需要加入 ~$TERM == "dumb" && unsetopt zle && PS1='$ '~
+
+** key bindings 
+
+| key       | function                          |
+|-----------+-----------------------------------|
+| =SPC f L= | find file across the whole system |
+| =SPC f o= | open with external program        |
+
